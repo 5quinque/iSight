@@ -11,7 +11,7 @@ export default class FolderNav extends Component {
     getFolders(path, folders) {
         return folders.map(folder =>
             <div className="nav-item" key={folder.inode}>
-                <Link className={"nav-link"} to={`${path}/${folder.inode}`}><FileDirectoryIcon /> {folder.inode}</Link>
+                <Link className={"nav-link"} to={`${path}/${folder.inode}`}>{folder.inode}</Link>
                 { folder.items ? (
                     <div className="px-2 text-secondary">
                     {this.getFolders(`${path}/${folder.inode}`, folder.items)}

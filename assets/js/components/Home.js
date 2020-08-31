@@ -2,7 +2,6 @@
 import React, { Component } from 'react';
 import { Route, Switch, Redirect, Link, withRouter, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { BrowserIcon, ClippyIcon, FileDirectoryIcon, HourglassIcon } from '@primer/octicons-react'
 import FolderNav from './FolderNav';
 import Folder from './Folder';
 
@@ -43,9 +42,12 @@ class Home extends Component {
                 <div className="container-fluid">
                     <div className="row">
                         <nav id="sidebarMenu" className="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+                        
                             {loading ? (
-                                <div className={'text-center'}>
-                                    <HourglassIcon />
+                                <div className={'text-center pt-3'}>
+                                    <div class="spinner-border" role="status">
+                                        <span class="sr-only">Loading...</span>
+                                    </div>
                                 </div>
                             ) : (
                                 <div className="sidebar-sticky pt-3">
