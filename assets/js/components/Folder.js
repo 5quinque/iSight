@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import { FileZipIcon, UploadIcon, TrashcanIcon } from '@primer/octicons-react'
 import {Button, ButtonGroup, ButtonDanger} from '@primer/components'
+import Thumbnail from './Thumbnail';
 
 class Folder extends Component {
     constructor() {
@@ -11,13 +12,19 @@ class Folder extends Component {
     }
 
     componentDidMount() {
-        this.setState({folder: this.props.match.params.folder})
-        this.getFiles();
+        this.setState(
+            {folder: this.props.match.params.folder},
+            this.getFiles
+        )
     }
 
-    componentWillReceiveProps(nextProps) {
-        this.setState({folder: nextProps.match.params.folder})
-        this.getFiles();
+    componentDidUpdate (prevProps, prevState) {
+        if (this.state.folder !== this.props.match.params.folder) {
+            this.setState(
+                {folder: this.props.match.params.folder},
+                this.getFiles
+            );
+        }
     }
 
     getFiles() {
@@ -27,49 +34,36 @@ class Folder extends Component {
     }
 
     render() {
-        const loading = this.state.loading;
+        const { files, folder, loading } = this.state;
+
         return (
             <div>
                 <div className="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 className="h2">{this.state.folder}</h1>
+                    <h1 className="h2">{folder}</h1>
                     <div className="btn-toolbar mb-2 mb-md-0">
                     <ButtonGroup display='block' my={2}>
                         <Button><UploadIcon /></Button>
                         <Button><FileZipIcon /></Button>
                         <ButtonDanger><TrashcanIcon /></ButtonDanger>
                     </ButtonGroup>
-                        {/* <div className="btn-group mr-2">
-                            <button type="button" className="btn btn-sm btn-outline-secondary"><UploadIcon /> Upload</button>
-                            <button type="button" className="btn btn-sm btn-outline-secondary"><FileZipIcon /> Download</button>
-                            <button type="button" className="btn btn-sm btn-danger"><TrashcanIcon /> Delete Folder</button>
-                        </div> */}
                     </div>
                 </div>
-            
-
-
-                        {loading ? (
-                            <div className={'text-center pt-3'}>
-                                <div class="spinner-border" role="status">
-                                    <span class="sr-only">Loading...</span>
-                                </div>
-                            </div>                        ) : (
-                            <div className={'row'}>
-                                {this.state.files.map(file =>
-
-                                <div className="col" key={file.id}>
-                                <img src="https://via.placeholder.com/150" className="rounded mx-auto d-block" alt={file.filename}></img>
-                                </div>
-
-                                )}
-                            </div>
+                {loading ? (
+                    <div className={'text-center pt-3'}>
+                        <div className="spinner-border" role="status">
+                            <span className="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                ) : (
+                    <div className={'row'}>
+                        {files.map(file =>
+                            <Thumbnail key={file.id} filename={file.filename} />
                         )}
-
-
-
+                    </div>
+                )}
             </div>
         )
     }
 }
-    
+
 export default Folder;
